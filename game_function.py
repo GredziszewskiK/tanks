@@ -42,10 +42,11 @@ def catch_event(player_tank):
 def update_bullets(bullets):
     """ Upddate all bullets """
     for bullet in bullets.copy():
-        if (bullet.rect.bottom <= bullet.screen.top
-             or bullet.rect.top >= bullet.screen.bottom
-             or bullet.rect.left >= bullet.screen.right
-             or bullet.rect.right <= bullet.screen.left):
-            bullets.remove(bullet)
-    for bullet in bullets:
         bullet.update_bullet()
+        if (
+                bullet.rect.bottom <= bullet.screen.top
+                or bullet.rect.top >= bullet.screen.bottom
+                or bullet.rect.left >= bullet.screen.right
+                or bullet.rect.right <= bullet.screen.left
+            ):
+            bullets.remove(bullet)

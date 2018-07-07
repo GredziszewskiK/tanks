@@ -38,8 +38,8 @@ class Game():
             self.surface.fill(self.g_settings.game_color, self.game_screen)
             self.surface.fill(self.g_settings.score_color, self.score_screen)
             game_function.catch_event(self.player_tank)
+            game_function.update_bullets(self.player_tank.bullets)
             for bullet in self.player_tank.bullets.sprites():
-                game_function.update_bullets(self.player_tank.bullets)
                 bullet.draw_bullet()
             self.player_tank.update_tank()
             self.player_tank.draw_tank()

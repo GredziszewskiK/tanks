@@ -23,16 +23,15 @@ class Bullet(Sprite):
         """ Drawing bullet. """
         pygame.draw.rect(self.surface, self.color, self.rect)
 
-    def update_bullet(self,):
+    def update_bullet(self):
         """ Update bullet positions. """
         if self.rotating_angle == ra.UP:
-            self.centery -= 0.1
+            self.centery -= 0.2
         if self.rotating_angle == ra.RIGHT:
-            self.centerx += 0.1
+            self.centerx += 0.2
         if self.rotating_angle == ra.DOWN:
-            self.centery += 0.1
+            self.centery += 0.2
         if self.rotating_angle == ra.LEFT:
-            self.centerx -= 0.1
-
+            self.centerx -= 0.2
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
