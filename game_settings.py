@@ -1,7 +1,7 @@
 """ Module for game setting """
 from enum import Enum
 
-class Game_settings():
+class GameSettings():
     """ Nie ma :"""
     def __init__(self):
         """ init game settings """
@@ -14,19 +14,19 @@ class Game_settings():
         self.game_width = 600
         self.game_positionx = 0
         self.game_positiony = 0
-        self.game_color = (10, 10, 10)
+        self.game_color = (30, 30, 30)
 
         # score screen
         self.score_height = 600
         self.score_width = 200
         self.score_positionx = 600
         self.score_positiony = 0
-        self.score_color = (30, 30, 30)
+        self.score_color = (20, 20, 20)
 
         # tank settings
         self.tank_move_factor = 0.5
 
-class Rotating_angle(Enum):
+class RotatingAngle(Enum):
     """ Enum for rotating angle. """
     UP = 0
     RIGHT = 270

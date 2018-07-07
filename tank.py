@@ -1,6 +1,7 @@
 """ Tank module """
 import pygame
-from game_settings import Rotating_angle as ra
+from game_settings import RotatingAngle as ra
+from bullets import Bullet
 
 class Tank():
     """ Player tank class """
@@ -10,10 +11,9 @@ class Tank():
         self.screen = screen
         self.image = pygame.image.load("images/player_tank.png")
         self.rot_image = pygame.transform.rotate(self.image, 0)
-        self.rect = pygame.Rect(0, 0, 30, 30)
+        self.rect = pygame.Rect(0, 0, 28, 29)
         self.rect.centerx = self.screen.centerx
         self.rect.centery = self.screen.centery
-        self.color = (0, 230, 0)
 
         # tank moving options
         self.moving_up = False
@@ -28,11 +28,14 @@ class Tank():
         # shooting site
         self.rotating_angle = ra.UP
 
-    def drow_tank(self):
+        # self bullets
+        self.bullets = pygame.sprite.Group()
+
+    def draw_tank(self):
         """ Drawing player tank. """
         self.surface.blit(self.rot_image, self.rect)
-  
-    def update(self):
+
+    def update_tank(self):
         """ updtate tank positions """
         if (self.moving_right and self.rect.right <= self.screen.right
                 and not self.moving_down and not self.moving_left
@@ -57,5 +60,14 @@ class Tank():
 
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
-        self.rot_image = pygame.transform.rotate(self.image,
-                self.rotating_angle.value)
+        self.rot_image = pygame.transform.rotate(
+            self.image, self.rotating_angle.value
+            )
+
+    def fire_bullet(self):
+        """Wystrzelenie pocisku."""
+        new_bullet = Bullet(
+            self.surface, self.screen,
+            self.rect, self.rotating_angle
+            )
+        self.bullets.add(new_bullet)
