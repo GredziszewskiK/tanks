@@ -23,12 +23,21 @@ class GameSettings():
         self.score_positiony = 0
         self.score_color = (20, 20, 20)
 
-        # tank settings
-        self.tank_move_factor = 0.5
+        # player tank
+        self.p_tank_move_factor = 0.5
+        self.p_tank_image = "images/player_tank.png"
+        self.p_tank_centerx = 30
+        self.p_tank_centery = 50
+
+        # enemy tank
+        self.e_tank_move_factor = 0.5
+        self.e_tank_image = "images/enemy_tank.png"
+        self.e_tank_centerx = 100
+        self.e_tank_centery = 100
 
 class RotatingAngle(Enum):
     """ Enum for rotating angle. """
     UP = 0
-    RIGHT = 270
-    DOWN = 180
     LEFT = 90
+    DOWN = 180
+    RIGHT = 270
