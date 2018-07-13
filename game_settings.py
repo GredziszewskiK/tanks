@@ -2,12 +2,13 @@
 from enum import Enum
 
 class GameSettings():
-    """ Nie ma :"""
+    """ All static setting for game objects. """
     def __init__(self):
         """ init game settings """
         # window settings
         self.window_height = 600
         self.window_width = 800
+        self.game_title = "Tanks 1990"
 
         # game screen
         self.game_height = 600
@@ -24,7 +25,7 @@ class GameSettings():
         self.score_color = (20, 20, 20)
 
         # player tank
-        self.p_tank_move_factor = 0.5
+        self.p_tank_move_factor = 0.3
         self.p_tank_image = "images/player_tank.png"
         self.p_tank_centerx = 30
         self.p_tank_centery = 50
@@ -35,8 +36,14 @@ class GameSettings():
         self.e_tank_centerx = 100
         self.e_tank_centery = 100
 
+        # bullets
+        self.bullets_move_factor = 0.5
+        self.bullets_width = 3
+        self.bullets_height = 3
+        self.bullets_color = (230, 230, 230)
+
 class RotatingAngle(Enum):
-    """ Enum for rotating angle. """
+    """ Enum for tank rotating angle. """
     UP = 0
     LEFT = 90
     DOWN = 180
