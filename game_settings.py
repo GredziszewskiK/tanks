@@ -25,25 +25,25 @@ class GameSettings():
         self.score_color = (20, 20, 20)
 
         # player tank
-        self.p_tank_move_factor = 0.3
+        self.p_tank_move_factor = 0.2
         self.p_tank_image = "images/player_tank.png"
-        self.p_tank_centerx = 30
-        self.p_tank_centery = 50
+        self.p_tank_centerx = 100
+        self.p_tank_centery = 500
 
         # enemy tank
-        self.e_tank_move_factor = 0.5
+        self.e_tank_move_factor = 0.6
         self.e_tank_image = "images/enemy_tank.png"
         self.e_tank_centerx = 100
         self.e_tank_centery = 100
 
         # bullets
-        self.bullets_move_factor = 0.5
+        self.bullets_move_factor = 0.4
         self.bullets_width = 3
         self.bullets_height = 3
         self.bullets_color = (230, 230, 230)
 
-class RotatingAngle(Enum):
-    """ Enum for tank rotating angle. """
+class MovingDirection(Enum):
+    """ Enum for tank moving directions. """
     UP = 0
     LEFT = 90
     DOWN = 180

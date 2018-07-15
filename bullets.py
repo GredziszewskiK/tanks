@@ -1,7 +1,7 @@
 """ Module for bullets """
 import pygame
 from pygame.sprite import Sprite
-from game_settings import RotatingAngle as ra
+from game_settings import MovingDirection as md
 
 class Bullet(Sprite):
     """ Enemys and player bullets. """
@@ -29,13 +29,13 @@ class Bullet(Sprite):
 
     def update_bullet(self):
         """ Update bullet positions. """
-        if self.rotating_angle == ra.UP:
+        if self.rotating_angle == md.UP:
             self.centery -= self.move_factor
-        if self.rotating_angle == ra.RIGHT:
+        if self.rotating_angle == md.RIGHT:
             self.centerx += self.move_factor
-        if self.rotating_angle == ra.DOWN:
+        if self.rotating_angle == md.DOWN:
             self.centery += self.move_factor
-        if self.rotating_angle == ra.LEFT:
+        if self.rotating_angle == md.LEFT:
             self.centerx -= self.move_factor
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
