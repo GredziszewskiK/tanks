@@ -5,7 +5,7 @@ from game_settings import MovingDirection as md
 
 class Bullet(Sprite):
     """ Enemys and player bullets. """
-    def __init__(self, g_settings, surface, screen, rect, rotating_angle):
+    def __init__(self, g_settings, surface, screen, rect, moving_direction):
         super(Bullet, self).__init__()
         self.screen = screen
         self.surface = surface
@@ -17,7 +17,7 @@ class Bullet(Sprite):
         )
         self.rect.centerx = rect.centerx
         self.rect.centery = rect.centery
-        self.rotating_angle = rotating_angle
+        self.moving_direction = moving_direction
         self.color = g_settings.bullets_color
 
         self.centerx = float(self.rect.centerx)
@@ -29,13 +29,13 @@ class Bullet(Sprite):
 
     def update_bullet(self):
         """ Update bullet positions. """
-        if self.rotating_angle == md.UP:
+        if self.moving_direction == md.UP:
             self.centery -= self.move_factor
-        if self.rotating_angle == md.RIGHT:
+        if self.moving_direction == md.RIGHT:
             self.centerx += self.move_factor
-        if self.rotating_angle == md.DOWN:
+        if self.moving_direction == md.DOWN:
             self.centery += self.move_factor
-        if self.rotating_angle == md.LEFT:
+        if self.moving_direction == md.LEFT:
             self.centerx -= self.move_factor
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery

@@ -56,6 +56,13 @@ def update_bullets(enemys, bullets):
     # remove bullets and enemies that hit each others
     p_bullets_enemy_collide(enemys, bullets)
 
+def update_player_tank(player_tank, enemys, walls):
+    """ ??? """
+    temp_player_tank = player_tank.__copy__()
+    temp_player_tank.update_tank()
+    if not temp_player_tank.check_collide(walls, enemys):
+        player_tank.update_tank()
+
 def update_screen(g_settings, surface, game_screen, score_screen,
                   player_tank, enemys, p_bullets, walls):
     """ Update screen. """
@@ -76,20 +83,19 @@ def p_bullets_enemy_collide(enemys, p_bullet):
 
 def create_walls(surface, walls):
     """Create walls"""
-    wall_1 = Wall(surface, 15, 45)
-    wall_2 = Wall(surface, 45, 45)
-    wall_3 = Wall(surface, 45, 75)
-    wall_4 = Wall(surface, 45, 105)
-    wall_5 = Wall(surface, 105, 15)
-    wall_6 = Wall(surface, 105, 45)
-    wall_7 = Wall(surface, 105, 75)
-    wall_8 = Wall(surface, 105, 105)
-    wall_9 = Wall(surface, 135, 45)
-    wall_9 = Wall(surface, 165, 45)
-    wall_10 = Wall(surface, 165, 45)
-    wall_11 = Wall(surface, 165, 75)
-    wall_12 = Wall(surface, 165, 105)
-    wall_13 = Wall(surface, 195, 45)
+    wall_1 = Wall(surface, 25, 75)
+    wall_2 = Wall(surface, 75, 75)
+    wall_3 = Wall(surface, 75, 125)
+    wall_4 = Wall(surface, 75, 175)
+    wall_5 = Wall(surface, 175, 25)
+    wall_6 = Wall(surface, 175, 75)
+    wall_7 = Wall(surface, 175, 125)
+    wall_8 = Wall(surface, 175, 175)
+    wall_9 = Wall(surface, 225, 75)
+    wall_10 = Wall(surface, 275, 75)
+    wall_11 = Wall(surface, 275, 125)
+    wall_12 = Wall(surface, 275, 175)
+    wall_13 = Wall(surface, 325, 75)
     walls.add(wall_1)
     walls.add(wall_2)
     walls.add(wall_3)

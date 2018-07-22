@@ -23,7 +23,7 @@ class Tank(Sprite):
         self.centerx = float(centerx)
         self.centery = float(centery)
         # tank rect
-        self.rect = pygame.Rect(0, 0, 26, 26)
+        self.rect = pygame.Rect(0, 0, 46, 46)
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
         self.moving_direction = moving_direction
@@ -91,12 +91,13 @@ class Tank(Sprite):
 
     def fire_bullet(self, g_settings):
         """ Create bullet and add it to tank bullet_list. """
-        new_bullet = Bullet(
-            g_settings,
-            self.surface, self.screen,
-            self.rect, self.moving_direction
-        )
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < g_settings.p_tank_bullets_limit:
+            new_bullet = Bullet(
+                g_settings,
+                self.surface, self.screen,
+                self.rect, self.moving_direction
+            )
+            self.bullets.add(new_bullet)
 
 
 class PlayerTank(Tank):
@@ -150,41 +151,6 @@ class EnemyTank(Tank):
         )
         self.move_time = 3
         self.start_timer = time.time()
-
-    def check_collide(self, enemys, enemy=None):
-        """
-        sprawdzenie kolizji czołgu z innymi obiektami gry i wyjazd za ekran
-        """
-        collided_enemys = pygame.sprite.spritecollide(self, enemys, False)
-        if enemy is not None:
-            collided_enemys.remove(enemy)
-        collided_elements = collided_enemys
-        collide = False
-        if self.moving_direction == md.UP:
-            for c_element in collided_elements:
-                if self.rect.top <= c_element.rect.bottom:
-                    collide = True
-            if self.rect.top <= self.screen.top:
-                collide = True
-        elif self.moving_direction == md.LEFT:
-            for c_element in collided_elements:
-                if self.rect.left <= c_element.rect.right:
-                    collide = True
-            if self.rect.left <= self.screen.left:
-                collide = True
-        elif self.moving_direction == md.DOWN:
-            for c_element in collided_elements:
-                if self.rect.bottom >= c_element.rect.top:
-                    collide = True
-            if self.rect.bottom >= self.screen.bottom:
-                collide = True
-        elif self.moving_direction == md.RIGHT:
-            for c_element in collided_elements:
-                if self.rect.right >= c_element.rect.left:
-                    collide = True
-            if self.rect.right >= self.screen.right:
-                collide = True
-        return collide
 
     def __copy__(self):
         return EnemyTank(

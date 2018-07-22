@@ -40,10 +40,10 @@ class Game():
         # sprites group for enemys tanks
         self.enemys = pygame.sprite.Group()
         self.enemy_tank = EnemyTank(
-            self.surface, self.game_screen, self.g_settings, md.RIGHT, 15, 15
+            self.surface, self.game_screen, self.g_settings, md.RIGHT, 25, 25
         )
         self.enemy_tank2 = EnemyTank(
-            self.surface, self.game_screen, self.g_settings, md.LEFT, 300, 100
+            self.surface, self.game_screen, self.g_settings, md.LEFT, 225, 25
         )
         self.enemys.add(self.enemy_tank)
         self.enemys.add(self.enemy_tank2)
@@ -71,10 +71,9 @@ class Game():
                     enemy.change_moving_direction()
                 else:
                     enemy.move_tank()
-            temp_player_tank = self.player_tank.__copy__()
-            temp_player_tank.update_tank()
-            if not temp_player_tank.check_collide(self.walls, self.enemys):
-                self.player_tank.update_tank()
+            game_function.update_player_tank(
+                self.player_tank, self.enemys, self.walls
+            )
             game_function.update_bullets(self.enemys, self.player_tank.bullets)
             game_function.update_screen(
                 self.g_settings, self.surface, self.game_screen,
