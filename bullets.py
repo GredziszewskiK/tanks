@@ -1,7 +1,7 @@
 """ Module for bullets """
 import pygame
 from pygame.sprite import Sprite
-from game_settings import RotatingAngle as ra
+from game_settings import RotatingAngle as md
 
 class Bullet(Sprite):
     """ Create bullets class """
@@ -25,13 +25,13 @@ class Bullet(Sprite):
 
     def update_bullet(self):
         """ Update bullet positions. """
-        if self.rotating_angle == ra.UP:
-            self.centery -= 0.2
-        if self.rotating_angle == ra.RIGHT:
-            self.centerx += 0.2
-        if self.rotating_angle == ra.DOWN:
-            self.centery += 0.2
-        if self.rotating_angle == ra.LEFT:
-            self.centerx -= 0.2
+        if self.rotating_angle == md.UP:
+            self.centery -= 0.5
+        if self.rotating_angle == md.RIGHT:
+            self.centerx += 0.5
+        if self.rotating_angle == md.DOWN:
+            self.centery += 0.5
+        if self.rotating_angle == md.LEFT:
+            self.centerx -= 0.5
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery

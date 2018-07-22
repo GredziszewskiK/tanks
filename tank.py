@@ -1,37 +1,34 @@
 """ Tank module """
+import time
+import random
+
 import pygame
-from game_settings import RotatingAngle as ra
+from pygame.sprite import Sprite
+
+from game_settings import RotatingAngle as md
 from bullets import Bullet
 
-class Tank():
+class Tank(Sprite):
     """ Player tank class """
     def __init__(
             self, surface, screen, move_factor,
             image_source, centerx, centery, rotating_angle
         ):
+        super().__init__()
         self.surface = surface
         self.screen = screen
         self.move_factor = move_factor
         self.image_source = image_source
         self.image = pygame.image.load(image_source)
         self.rot_image = pygame.transform.rotate(self.image, 0)
-        self.rect = pygame.Rect(0, 0, 28, 29)
-        self.rect.centerx = float(centerx)
-        self.rect.centery = float(centery)
-
-        # tank moving options
-        self.moving_up = False
-        self.moving_down = False
-        self.moving_left = False
-        self.moving_right = False
-        self.colision = False
-
+        self.moving_direction = rotating_angle
         # tank positions
-        self.centerx = float(self.rect.centerx)
-        self.centery = float(self.rect.centery)
+        self.centerx = float(centerx)
+        self.centery = float(centery)
 
-        # shooting site
-        self.rotating_angle = rotating_angle
+        self.rect = pygame.Rect(0, 0, 28, 29)
+        self.rect.centerx = float(self.centerx)
+        self.rect.centery = float(self.centery)
 
         # self bullets
         self.bullets = pygame.sprite.Group()
@@ -41,49 +38,136 @@ class Tank():
         """ Drawing player tank. """
         self.surface.blit(self.rot_image, self.rect)
 
-    def update_tank(self):
-        """ updtate tank positions """
-        if (self.moving_right and self.rect.right <= self.screen.right
-                and not self.moving_down and not self.moving_left
-                and not self.moving_up):
-            self.rotating_angle = ra.RIGHT
-            self.centerx += self.move_factor
-        if (self.moving_left and self.rect.left >= self.screen.left
-                and not self.moving_right and not self.moving_up
-                and not self.moving_down):
-            self.rotating_angle = ra.LEFT
-            self.centerx -= self.move_factor
-        if (self.moving_up and self.rect.top >= self.screen.top
-                and not self.moving_down and not self.moving_left
-                and not self.moving_right):
-            self.rotating_angle = ra.UP
+    def moving_tank(self):
+        """ Move tank by move_factor. """
+        if self.moving_direction.name == md.UP.name: # moving up
             self.centery -= self.move_factor
-        if (self.moving_down and self.rect.bottom <= self.screen.bottom
-                and not self.moving_up and not self.moving_left
-                and not self.moving_right):
-            self.rotating_angle = ra.DOWN
+        if self.moving_direction.name == md.DOWN.name: # moving down
             self.centery += self.move_factor
-
+        if self.moving_direction.name == md.RIGHT.name: # moving right
+            self.centerx += self.move_factor
+        if self.moving_direction.name == md.LEFT.name: # moving left
+            self.centerx -= self.move_factor
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
-        self.rotating_tank()
 
     def fire_bullet(self):
         """Wystrzelenie pocisku."""
         new_bullet = Bullet(
             self.surface, self.screen,
-            self.rect, self.rotating_angle
+            self.rect, self.moving_direction
         )
         self.bullets.add(new_bullet)
 
     def rotating_tank(self):
         """ ??? """
         self.rot_image = pygame.transform.rotate(
-            self.image, self.rotating_angle.value
+            self.image, self.moving_direction.value
         )
+
+    def check_collide(self, enemys, enemy=None):
+        """
+        sprawdzenie kolizji czołgu z innymi obiektami gry i wyjazd za ekran
+        """
+        collided_enemys = pygame.sprite.spritecollide(self, enemys, False)
+        if enemy is not None:
+            collided_enemys.remove(enemy)
+        collided_elements = collided_enemys
+        collide = False
+        if self.moving_direction == md.UP:
+            for c_element in collided_elements:
+                if self.rect.top <= c_element.rect.bottom:
+                    collide = True
+            if self.rect.top <= self.screen.top:
+                collide = True
+        elif self.moving_direction == md.LEFT:
+            for c_element in collided_elements:
+                if self.rect.left <= c_element.rect.right:
+                    collide = True
+            if self.rect.left <= self.screen.left:
+                collide = True
+        elif self.moving_direction == md.DOWN:
+            for c_element in collided_elements:
+                if self.rect.bottom >= c_element.rect.top:
+                    collide = True
+            if self.rect.bottom >= self.screen.bottom:
+                collide = True
+        elif self.moving_direction == md.RIGHT:
+            for c_element in collided_elements:
+                if self.rect.right >= c_element.rect.left:
+                    collide = True
+            if self.rect.right >= self.screen.right:
+                collide = True
+        return collide
 
     def __copy__(self):
         return Tank(
             self.surface, self.screen, self.move_factor, self.image_source,
-            self.centerx, self.centery, self.rotating_angle
+            self.centerx, self.centery, self.moving_direction
         )
+
+
+class PlayerTank(Tank):
+    """ ??? """
+    def __init__(
+            self, surface, screen, move_factor,
+            image_source, centerx, centery, rotating_angle, moving=None
+    ):
+        super().__init__(
+            surface, screen, move_factor,
+            image_source, centerx, centery, rotating_angle
+        )
+        # tank moving options
+        if moving is None:
+            self.moving = []
+        else:
+            self.moving = moving
+
+    def __copy__(self):
+        return PlayerTank(
+            self.surface, self.screen, self.move_factor, self.image_source,
+            self.centerx, self.centery, self.moving_direction, self.moving
+        )
+
+    def update_tank(self):
+        """ updtate player tank positions """
+        if self.moving:
+            self.moving_direction = self.moving[-1]
+            self.moving_tank()
+            self.rotating_tank()
+
+class EnemyTank(Tank):
+    """ ??? """
+    def __init__(
+            self, surface, screen, move_factor,
+            image_source, centerx, centery, rotating_angle
+    ):
+        super().__init__(
+            surface, screen, move_factor,
+            image_source, centerx, centery, rotating_angle
+        )
+        self.move_time = 3
+        self.start_timer = time.time()
+
+    def __copy__(self):
+        return EnemyTank(
+            self.surface, self.screen, self.move_factor, self.image_source,
+            self.centerx, self.centery, self.moving_direction
+        )
+
+    def update_tank(self, enemys, walls):
+        """ Update enemy tank. """
+        enemys_copy = enemys.copy()
+        enemys_copy.remove(self)
+        tank_copy = self.__copy__()
+        tank_copy.moving_tank()
+        collide = tank_copy.check_collide(walls, enemys, self)
+        if collide:
+            self.change_moving_direction()
+        else:
+            self.moving_tank()
+
+    def change_moving_direction(self):
+        """ Change enemy tank moving direction. New direction is random. """
+        self.moving_direction = random.choice(list(md))
+        self.rotating_tank()

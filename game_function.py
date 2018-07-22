@@ -2,17 +2,18 @@
 import sys
 
 import pygame
+from game_settings import RotatingAngle as md
 
 def event_key_down(event, player_tank):
     """ Events for presing keys """
     if event.key == pygame.K_LEFT:
-        player_tank.moving_left = True
+        player_tank.moving.append(md.LEFT)
     if event.key == pygame.K_RIGHT:
-        player_tank.moving_right = True
+        player_tank.moving.append(md.RIGHT)
     if event.key == pygame.K_UP:
-        player_tank.moving_up = True
+        player_tank.moving.append(md.UP)
     if event.key == pygame.K_DOWN:
-        player_tank.moving_down = True
+        player_tank.moving.append(md.DOWN)
     if event.key == pygame.K_q:
         sys.exit()
     if event.key == pygame.K_SPACE:
@@ -21,13 +22,13 @@ def event_key_down(event, player_tank):
 def event_key_up(event, player_tank):
     """ Events for presing keys """
     if event.key == pygame.K_LEFT:
-        player_tank.moving_left = False
+        player_tank.moving.remove(md.LEFT)
     if event.key == pygame.K_RIGHT:
-        player_tank.moving_right = False
+        player_tank.moving.remove(md.RIGHT)
     if event.key == pygame.K_UP:
-        player_tank.moving_up = False
+        player_tank.moving.remove(md.UP)
     if event.key == pygame.K_DOWN:
-        player_tank.moving_down = False
+        player_tank.moving.remove(md.DOWN)
 
 def catch_event(player_tank):
     """ Check type of events """

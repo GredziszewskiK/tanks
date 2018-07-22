@@ -24,13 +24,13 @@ class GameSettings():
         self.score_color = (20, 20, 20)
 
         # player tank
-        self.p_tank_move_factor = 0.5
+        self.p_tank_move_factor = 0.2
         self.p_tank_image = "images/player_tank.png"
         self.p_tank_centerx = 30
         self.p_tank_centery = 50
 
         # enemy tank
-        self.e_tank_move_factor = 0.5
+        self.e_tank_move_factor = 0.2
         self.e_tank_image = "images/enemy_tank.png"
         self.e_tank_centerx = 100
         self.e_tank_centery = 100
