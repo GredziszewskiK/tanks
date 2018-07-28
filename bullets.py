@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 from game_settings import MovingDirection as md
 
 class Bullet(Sprite):
-    """ Enemys and player bullets. """
+    """ Create bullet. """
     def __init__(self, g_settings, surface, screen, rect, moving_direction):
         super(Bullet, self).__init__()
         self.screen = screen
@@ -19,7 +19,6 @@ class Bullet(Sprite):
         self.rect.centery = rect.centery
         self.moving_direction = moving_direction
         self.color = g_settings.bullets_color
-
         self.centerx = float(self.rect.centerx)
         self.centery = float(self.rect.centery)
 

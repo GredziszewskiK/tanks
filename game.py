@@ -3,7 +3,7 @@ Game like "Battle City" for NES
 """
 import pygame
 
-import game_function
+import game_function as gf
 from tank import PlayerTank
 from tank import EnemyTank
 from game_settings import GameSettings
@@ -31,12 +31,13 @@ class Game():
         # set window title
         pygame.display.set_caption(self.g_settings.game_title)
         # player rank
-        self.player_tank = PlayerTank(
+        self.p_tank = PlayerTank(
             self.surface, self.game_screen, self.g_settings, md.UP,
             self.g_settings.p_tank_centerx, self.g_settings.p_tank_centery
         )
-        # sprites group for player bullets
+        # sprites group for bullets
         self.p_bullets = pygame.sprite.Group()
+        self.e_bullets = pygame.sprite.Group()
         # sprites group for enemys tanks
         self.enemys = pygame.sprite.Group()
         self.enemy_tank = EnemyTank(
@@ -49,36 +50,31 @@ class Game():
         self.enemys.add(self.enemy_tank2)
         # create wall
         self.walls = pygame.sprite.Group()
-        self.font = pygame.font.Font(None, 30)
-        self.clock = pygame.time.Clock()
         # Start game loop
         self.loop()
 
     def loop(self):
         """ Game loop """
-        game_function.create_walls(self.surface, self.walls)
+        gf.create_walls(self.surface, self.walls)
         while True:
-            game_function.catch_event(
-                self.g_settings, self.player_tank
+            gf.catch_event(
+                self.p_bullets, self.p_tank
             )
-            # update enemys
-            for enemy in self.enemys:
-                temp_enemy = enemy.__copy__()
-                temp_enemy.move_tank()
-                temp_enemys = self.enemys.copy()
-                temp_enemys.remove(enemy)
-                if temp_enemy.check_collide(self.walls, temp_enemys):
-                    enemy.change_moving_direction()
-                else:
-                    enemy.move_tank()
-            game_function.update_player_tank(
-                self.player_tank, self.enemys, self.walls
+            gf.update_enemys(
+                self.enemys, self.walls, self.e_bullets, self.p_tank
             )
-            game_function.update_bullets(self.enemys, self.player_tank.bullets)
-            game_function.update_screen(
+            gf.update_player_tank(
+                self.p_tank, self.enemys, self.walls
+            )
+            gf.update_bullets(self.p_bullets)
+            gf.update_bullets(self.e_bullets)
+            gf.p_bullet_e_bullets_collide(self.p_bullets, self.e_bullets)
+            gf.p_bullets_enemy_collide(self.enemys, self.p_bullets)
+            gf.e_bullets_player_collide(self.p_tank, self.e_bullets)
+            gf.update_screen(
                 self.g_settings, self.surface, self.game_screen,
-                self.score_screen, self.player_tank, self.enemys,
-                self.player_tank.bullets, self.walls
+                self.score_screen, self.p_tank, self.enemys,
+                self.p_bullets, self.walls, self.e_bullets
             )
 
 if __name__ == '__main__':

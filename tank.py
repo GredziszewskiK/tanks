@@ -7,7 +7,10 @@ from game_settings import MovingDirection as md
 from bullets import Bullet
 
 class Tank(Sprite):
-    """ ??? """
+    """
+    Class for basic tank. Preffered use PlayerTank and EnemyTank to create
+    tank object.
+    """
     def __init__(
             self, surface, screen, move_factor,
             image_source, centerx, centery, moving_direction
@@ -23,12 +26,13 @@ class Tank(Sprite):
         self.centerx = float(centerx)
         self.centery = float(centery)
         # tank rect
-        self.rect = pygame.Rect(0, 0, 46, 46)
+        self.rect = pygame.Rect(
+            0, 0, self.image.get_rect().width, self.image.get_rect().height
+        )
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
         self.moving_direction = moving_direction
         self.rotating_tank()
-        self.bullets = pygame.sprite.Group()
 
     def draw_tank(self):
         """ Drawing tank. """
@@ -53,15 +57,15 @@ class Tank(Sprite):
         self.rect.centerx = self.centerx
         self.rect.centery = self.centery
 
-    def check_collide(self, walls, enemys, enemy=None):
+    def check_collide(self, walls, enemys, p_tank=None):
         """
         sprawdzenie kolizji czołgu z innymi obiektami gry i wyjazd za ekran
         """
         collided_walls = pygame.sprite.spritecollide(self, walls, False)
         collided_enemys = pygame.sprite.spritecollide(self, enemys, False)
-        if enemy is not None:
-            collided_enemys.remove(enemy)
         collided_elements = collided_walls + collided_enemys
+        if p_tank is not None and pygame.sprite.collide_rect(self, p_tank):
+            collided_elements.append(p_tank)
         collide = False
         if self.moving_direction == md.UP:
             for c_element in collided_elements:
@@ -89,19 +93,8 @@ class Tank(Sprite):
                 collide = True
         return collide
 
-    def fire_bullet(self, g_settings):
-        """ Create bullet and add it to tank bullet_list. """
-        if len(self.bullets) < g_settings.p_tank_bullets_limit:
-            new_bullet = Bullet(
-                g_settings,
-                self.surface, self.screen,
-                self.rect, self.moving_direction
-            )
-            self.bullets.add(new_bullet)
-
-
 class PlayerTank(Tank):
-    """ ??? """
+    """ Create tank for player. """
     def __init__(
             self, surface, screen, g_settings, moving_direction,
             centerx, centery, moving=None
@@ -128,17 +121,26 @@ class PlayerTank(Tank):
         """
         Update player tank moving direction. New direction is chosen by player.
         """
-        self.moving_direction = self.moving[-1]
-
-    def update_tank(self):
-        """ ??? """
         if self.moving:
-            self.change_moving_direction()
-            self.rotating_tank()
-            self.move_tank()
+            self.moving_direction = self.moving[-1]
+
+    def move_tank(self):
+        """ Move player tank. """
+        if self.moving:
+            super().move_tank()
+
+    def fire_bullet(self, bullets):
+        """ Create bullet and add it to tank bullet_list. """
+        if len(bullets) < self.g_settings.p_tank_bullets_limit:
+            new_bullet = Bullet(
+                self.g_settings,
+                self.surface, self.screen,
+                self.rect, self.moving_direction
+            )
+            bullets.add(new_bullet)
 
 class EnemyTank(Tank):
-    """ ??? """
+    """ Create enemys tank. """
     def __init__(
             self, surface, screen, g_settings, moving_direction, centerx,
             centery
@@ -149,7 +151,7 @@ class EnemyTank(Tank):
             self.g_settings.e_tank_image, centerx,
             centery, moving_direction
         )
-        self.move_time = 3
+        self.shot_time = self.g_settings.e_tank_shot_time
         self.start_timer = time.time()
 
     def __copy__(self):
@@ -162,3 +164,17 @@ class EnemyTank(Tank):
         """ Change enemy tank moving direction. New direction is random. """
         self.moving_direction = random.choice(list(md))
         self.rotating_tank()
+
+    def fire_bullet(self, bullets):
+        """
+        Enemy tank shot. Tank can shot evry x second. X is time saved in
+        game_settings.py > self.e_tank_shot_time
+        """
+        if (time.time()-self.start_timer) > self.shot_time:
+            self.start_timer = time.time()
+            new_bullet = Bullet(
+                self.g_settings,
+                self.surface, self.screen,
+                self.rect, self.moving_direction
+            )
+            bullets.add(new_bullet)

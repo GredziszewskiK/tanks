@@ -25,20 +25,21 @@ class GameSettings():
         self.score_color = (20, 20, 20)
 
         # player tank
-        self.p_tank_move_factor = 0.2
+        self.p_tank_move_factor = 0.3
         self.p_tank_image = "images/player_tank.png"
         self.p_tank_centerx = 100
         self.p_tank_centery = 500
         self.p_tank_bullets_limit = 3
 
         # enemy tank
-        self.e_tank_move_factor = 0.2
+        self.e_tank_move_factor = 0.3
         self.e_tank_image = "images/enemy_tank.png"
         self.e_tank_centerx = 100
         self.e_tank_centery = 100
+        self.e_tank_shot_time = 3
 
         # bullets
-        self.bullets_move_factor = 0.4
+        self.bullets_move_factor = 0.5
         self.bullets_width = 10
         self.bullets_height = 10
         self.bullets_color = (230, 230, 230)
