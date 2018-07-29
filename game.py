@@ -8,6 +8,7 @@ from tank import PlayerTank
 from tank import EnemyTank
 from game_settings import GameSettings
 from game_settings import MovingDirection as md
+import map_drawing
 
 class Game():
     """ Main game class. """
@@ -46,16 +47,16 @@ class Game():
         self.enemy_tank2 = EnemyTank(
             self.surface, self.game_screen, self.g_settings, md.LEFT, 225, 25
         )
-        self.enemys.add(self.enemy_tank)
-        self.enemys.add(self.enemy_tank2)
+        # self.enemys.add(self.enemy_tank)
+        # self.enemys.add(self.enemy_tank2)
         # create wall
         self.walls = pygame.sprite.Group()
-        # Start game loop
         self.loop()
 
     def loop(self):
         """ Game loop """
-        gf.create_walls(self.surface, self.walls)
+        # gf.create_walls(self.surface, self.walls)
+        map_drawing.read_map_elements(self.surface, self.g_settings, self.walls)
         while True:
             gf.catch_event(
                 self.p_bullets, self.p_tank

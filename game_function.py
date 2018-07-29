@@ -48,7 +48,7 @@ def update_bullets(bullets):
         if (
                 bullet.rect.bottom <= bullet.screen.top
                 or bullet.rect.top >= bullet.screen.bottom
-                or bullet.rect.left >= bullet.screen.right
+                or bullet.rect.right >= bullet.screen.right
                 or bullet.rect.right <= bullet.screen.left
         ):
             bullets.remove(bullet)

@@ -6,21 +6,21 @@ class GameSettings():
     def __init__(self):
         """ init game settings """
         # window settings
-        self.window_height = 650
-        self.window_width = 850
+        self.window_height = 624
+        self.window_width = 824
         self.game_title = "Tanks 1990"
 
-        # game screen
-        self.game_height = 650
-        self.game_width = 650
+        # game screen size 13x13
+        self.game_height = 624
+        self.game_width = 624
         self.game_positionx = 0
         self.game_positiony = 0
         self.game_color = (30, 30, 30)
 
         # score screen
-        self.score_height = 650
+        self.score_height = 624
         self.score_width = 200
-        self.score_positionx = 650
+        self.score_positionx = 624
         self.score_positiony = 0
         self.score_color = (20, 20, 20)
 
@@ -43,6 +43,10 @@ class GameSettings():
         self.bullets_width = 10
         self.bullets_height = 10
         self.bullets_color = (230, 230, 230)
+
+        # walls
+        self.brick_wall = "images/brick_wall.png"
+        self.steal_wall = "images/steal_wall.png"
 
 class MovingDirection(Enum):
     """ Enum for tank moving directions. """
